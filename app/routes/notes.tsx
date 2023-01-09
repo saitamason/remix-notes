@@ -22,6 +22,11 @@ export async function loader() {
 export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
   const noteData = Object.fromEntries(formData);
+  noteData.title = String(noteData.title);
+
+  if (noteData.title.trim().length < 2) {
+    return { message: "Invalid title - must be at least 2 characters long." };
+  }
 
   const existingNotes = await getStoredNotes();
   noteData.id = new Date().toISOString();
