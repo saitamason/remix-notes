@@ -1,12 +1,7 @@
 import styles from "./NoteList.css";
+import type { Note } from "~/data/notes";
 
-interface Note {
-  id: string;
-  title: string;
-  content: string;
-}
-
-function NoteList({ notes }: { notes: Note[] }) {
+export default function NoteList({ notes }: { notes: Note[] }) {
   return (
     <ul id="note-list">
       {notes.map((note, index) => (
@@ -36,8 +31,6 @@ function NoteList({ notes }: { notes: Note[] }) {
     </ul>
   );
 }
-
-export default NoteList;
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
