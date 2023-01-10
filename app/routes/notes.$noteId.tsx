@@ -1,4 +1,5 @@
 import { Link, useLoaderData } from "@remix-run/react";
+import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 import type { Note } from "~/data/notes";
@@ -28,7 +29,7 @@ export async function loader({ params }: { params: { noteId: string } }) {
 
   if (!selectedNote) {
     throw json(
-      { message: "Can't find note with the given ID." },
+      { message: "Could not find note with the given ID." },
       {
         status: 404,
         statusText: "Not found",
@@ -38,6 +39,11 @@ export async function loader({ params }: { params: { noteId: string } }) {
 
   return selectedNote || [];
 }
+
+export const meta: MetaFunction = ({ data }: { data: Note }) => ({
+  title: data?.title,
+  description: data?.content,
+});
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];

@@ -1,3 +1,4 @@
+import type { MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useCatch, useLoaderData } from "@remix-run/react";
 import NewNote, { links as newNoteLinks } from "~/components/NewNote";
@@ -54,6 +55,11 @@ export async function action({ request }: { request: Request }) {
   await storeNotes(updatedNotes);
   return redirect("/notes");
 }
+
+export const meta: MetaFunction = () => ({
+  title: "All notes",
+  description: "Manage your notes with ease.",
+});
 
 export function links() {
   return [...newNoteLinks(), ...noteListLinks()];
