@@ -3,7 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { useCatch, useLoaderData } from "@remix-run/react";
 import NewNote, { links as newNoteLinks } from "~/components/NewNote";
 import NoteList, { links as noteListLinks } from "~/components/NoteList";
-import { getStoredNotes, storeNotes } from "~/data/notes";
+import { getNotes } from "~/data/notes.server";
 
 export default function NotesPage() {
   const notes = useLoaderData();
@@ -28,7 +28,7 @@ export function CatchBoundary() {
 }
 
 export async function loader() {
-  const notes = await getStoredNotes();
+  const notes = await getNotes();
 
   if (!notes || notes.length === 0) {
     throw json(

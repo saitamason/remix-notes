@@ -1,5 +1,5 @@
 import styles from "./NoteList.css";
-import type { Note } from "~/data/notes";
+import type { Note } from "~/data/notes.server";
 import { Link } from "react-router-dom";
 
 export default function NoteList({ notes }: { notes: Note[] }) {
