@@ -4,6 +4,7 @@ export interface Note {
   id: string;
   title: string;
   content: string;
+  date: string;
 }
 
 export const addNote = async (title: string, content: string) => {

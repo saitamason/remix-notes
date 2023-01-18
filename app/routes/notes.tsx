@@ -3,7 +3,8 @@ import { json, redirect } from "@remix-run/node";
 import { useCatch, useLoaderData } from "@remix-run/react";
 import NewNote, { links as newNoteLinks } from "~/components/NewNote";
 import NoteList, { links as noteListLinks } from "~/components/NoteList";
-import { getNotes } from "~/data/notes.server";
+import type { Note } from "~/data/notes.server";
+import { addNote, getNotes } from "~/data/notes.server";
 
 export default function NotesPage() {
   const notes = useLoaderData();
@@ -42,18 +43,21 @@ export async function loader() {
 
 export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
-  const noteData = Object.fromEntries(formData);
-  noteData.title = String(noteData.title);
+  const noteData = Object.fromEntries(formData) as unknown as Note;
 
-  if (noteData.title.trim().length < 2) {
-    return { message: "Invalid title - must be at least 2 characters long." };
+  if (noteData.title.trim().length < 1) {
+    return { message: "Invalid title - must be at least 1 character long." };
   }
 
-  const existingNotes = await getStoredNotes();
-  noteData.id = new Date().toISOString();
-  const updatedNotes = existingNotes.concat(noteData);
-  await storeNotes(updatedNotes);
-  return redirect("/notes");
+  try {
+    await addNote(noteData.title, noteData.content);
+    return redirect("/notes");
+  } catch (error) {
+    throw json(
+      { message: "Could not save note." },
+      { status: 500, statusText: "Internal Server Error" }
+    );
+  }
 }
 
 export const meta: MetaFunction = () => ({

@@ -3,7 +3,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 import type { Note } from "~/data/notes.server";
-import { getStoredNotes } from "~/data/notes.server";
+import { getNotes } from "~/data/notes.server";
 import styles from "~/styles/note-details.css";
 
 export default function NoteDetailsPage() {
@@ -23,9 +23,9 @@ export default function NoteDetailsPage() {
 }
 
 export async function loader({ params }: { params: { noteId: string } }) {
-  const notes = await getStoredNotes();
+  const notes = await getNotes();
   const noteId = params.noteId;
-  const selectedNote: Note = notes.find((note: Note) => note.id === noteId);
+  const selectedNote = notes.find((note) => note.id === noteId);
 
   if (!selectedNote) {
     throw json(
